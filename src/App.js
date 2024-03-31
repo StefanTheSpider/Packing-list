@@ -34,7 +34,6 @@ function Form() {
             packed: false,
         }
         console.log(newItem)
-        initialItems.push(newItem)
 
         setDescription('')
         setQuantety(1)
