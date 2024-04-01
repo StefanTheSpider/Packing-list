@@ -1,17 +1,28 @@
 import { useState } from 'react'
-
 const initialItems = [
     { id: 1, description: 'Passports', quantity: 2, packed: false },
     { id: 2, description: 'Socks', quantity: 12, packed: false },
-    { id: 3, description: 'Charger', quantity: 1, packed: true },
+    { id: 3, description: 'Charger', quantity: 1, packed: false },
 ]
 
 export default function App() {
+    const [items, setItems] = useState(initialItems, [])
+
+    function handleAddedItems(item) {
+        setItems((items) => [...items, item])
+    }
+    function handleRemovedItems(id) {
+        setItems((items) => items.filter((item) => item.id !== id))
+    }
+
     return (
         <div className="app">
             <Header />
-            <Form />
-            <Packinglist />
+            <Form onAddedItems={handleAddedItems} />
+            <Packinglist
+                items={items}
+                onHandleRemovedItems={handleRemovedItems}
+            />
             <Footer />
         </div>
     )
@@ -20,20 +31,21 @@ export default function App() {
 function Header() {
     return <h1>✈️ Far Away 🏝️</h1>
 }
-function Form() {
+function Form({ onAddedItems }) {
     const [description, setDescription] = useState('')
-    const [quantaty, setQuantety] = useState(1)
+    const [quantity, setQuantety] = useState(1)
 
     function handleSubmit(e) {
         e.preventDefault()
         if (!description) return
         const newItem = {
             description,
-            quantaty,
+            quantity,
             id: Date.now(),
             packed: false,
         }
         console.log(newItem)
+        onAddedItems(newItem)
 
         setDescription('')
         setQuantety(1)
@@ -43,7 +55,7 @@ function Form() {
         <form className="add-form" onSubmit={handleSubmit}>
             <h3>What do you need for you trip?</h3>
             <select
-                value={quantaty}
+                value={quantity}
                 onChange={(e) => setQuantety(Number(e.target.value))}
                 placeholder="quontaty"
             >
@@ -63,25 +75,29 @@ function Form() {
         </form>
     )
 }
-function Packinglist() {
+function Packinglist({ items, onHandleRemovedItems }) {
     return (
         <div className="list">
             <ul>
-                {initialItems.map((item) => (
-                    <Item item={item} key={item.id} />
+                {items.map((item) => (
+                    <Item
+                        item={item}
+                        onHandleRemovedItems={onHandleRemovedItems}
+                        key={item.id}
+                    />
                 ))}
             </ul>
         </div>
     )
 }
 
-function Item({ item }) {
+function Item({ item, onHandleRemovedItems }) {
     return (
         <li style={item.packed ? { textDecoration: 'line-through' } : {}}>
             <span>
                 {item.quantity} {item.description}
             </span>
-            <button>❌</button>
+            <button onClick={() => onHandleRemovedItems(item.id)}>❌</button>
         </li>
     )
 }
