@@ -6,13 +6,21 @@ const initialItems = [
 ]
 
 export default function App() {
-    const [items, setItems] = useState(initialItems, [])
+    const [items, setItems] = useState([])
 
     function handleAddedItems(item) {
         setItems((items) => [...items, item])
     }
     function handleRemovedItems(id) {
         setItems((items) => items.filter((item) => item.id !== id))
+    }
+
+    function handleToggleItem(id) {
+        setItems((items) =>
+            items.map((item) =>
+                item.id === id ? { ...item, packed: !item.packed } : item
+            )
+        )
     }
 
     return (
@@ -22,8 +30,9 @@ export default function App() {
             <Packinglist
                 items={items}
                 onHandleRemovedItems={handleRemovedItems}
+                onHandleToggleItem={handleToggleItem}
             />
-            <Footer />
+            <Footer items={items} />
         </div>
     )
 }
@@ -75,7 +84,7 @@ function Form({ onAddedItems }) {
         </form>
     )
 }
-function Packinglist({ items, onHandleRemovedItems }) {
+function Packinglist({ items, onHandleRemovedItems, onHandleToggleItem }) {
     return (
         <div className="list">
             <ul>
@@ -83,6 +92,7 @@ function Packinglist({ items, onHandleRemovedItems }) {
                     <Item
                         item={item}
                         onHandleRemovedItems={onHandleRemovedItems}
+                        onHandleToggleItem={onHandleToggleItem}
                         key={item.id}
                     />
                 ))}
@@ -91,10 +101,17 @@ function Packinglist({ items, onHandleRemovedItems }) {
     )
 }
 
-function Item({ item, onHandleRemovedItems }) {
+function Item({ item, onHandleRemovedItems, onHandleToggleItem }) {
     return (
-        <li style={item.packed ? { textDecoration: 'line-through' } : {}}>
-            <span>
+        <li>
+            <input
+                type="checkbox"
+                value={item.packed}
+                onChange={() => {
+                    onHandleToggleItem(item.id)
+                }}
+            ></input>
+            <span style={item.packed ? { textDecoration: 'line-through' } : {}}>
                 {item.quantity} {item.description}
             </span>
             <button onClick={() => onHandleRemovedItems(item.id)}>❌</button>
@@ -102,10 +119,13 @@ function Item({ item, onHandleRemovedItems }) {
     )
 }
 
-function Footer() {
+function Footer({ items }) {
     return (
         <footer className="stats">
-            <em>You have x items on your list, and you alrady packed x (x%)</em>
+            <em>
+                You have {items.length} items on your list, and you alrady
+                packed {} (x%)
+            </em>
         </footer>
     )
 }
