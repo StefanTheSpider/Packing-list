@@ -29,20 +29,27 @@ body {
     grid-template-rows: auto auto 1fr auto;
 }
 
-h1 {
+h1,
+h2 {
     text-align: center;
-    background-color: #f4a226;
+    background-color: #f3752c;
     font-family: 'Monoton';
     font-size: 8rem;
     text-transform: uppercase;
     font-weight: 400;
     word-spacing: 30px;
     letter-spacing: -5px;
-    padding: 2.4rem 0;
+    padding: 2.4rem 0 0 0;
+}
+
+h2 {
+    font-size: 4rem;
+    letter-spacing: 0.5rem;
+    padding: 0;
 }
 
 .add-form {
-    background-color: #e5771f;
+    background-color: #ea899a;
     padding: 2.8rem 0;
     display: flex;
     align-items: center;
@@ -71,11 +78,12 @@ input {
 
 .add-form button {
     text-transform: uppercase;
-    background-color: #76c7ad;
+    background-color: #6c6874;
+    color: #fff;
 }
 
 .list {
-    background-color: #5a3e2b;
+    background-color: #2e5978 !important;
     color: #ffebb3;
     padding: 4rem 0;
 
@@ -116,7 +124,7 @@ input {
 input[type='checkbox'] {
     height: 2rem;
     width: 2rem;
-    accent-color: #e5771f;
+    accent-color: #f3752c;
 }
 
 .list li button {
@@ -129,8 +137,9 @@ input[type='checkbox'] {
 }
 
 .stats {
-    background-color: #76c7ad;
+    background-color: #6c6874;
     text-align: center;
     font-weight: 700;
     padding: 3.2rem 0;
+    color: #fff;
 }
