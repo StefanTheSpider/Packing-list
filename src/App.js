@@ -6,7 +6,7 @@ const initialItems = [
 ]
 
 export default function App() {
-    const [items, setItems] = useState([])
+    const [items, setItems] = useState(initialItems, [])
 
     function handleAddedItems(item) {
         setItems((items) => [...items, item])
@@ -120,11 +120,15 @@ function Item({ item, onHandleRemovedItems, onHandleToggleItem }) {
 }
 
 function Footer({ items }) {
+    const itemsTotal = items.length
+    const itemsPacked = items.reduce((acc, item) => acc + item.packed, 0)
+    const prozent = ((itemsPacked / itemsTotal) * 100).toFixed(2)
     return (
         <footer className="stats">
             <em>
-                You have {items.length} items on your list, and you alrady
-                packed {} (x%)
+                You have {itemsTotal} items on your list, and you alrady packed{' '}
+                {itemsPacked} (
+                {prozent < 100 ? prozent + '%' : "you're done 🎉"})
             </em>
         </footer>
     )
